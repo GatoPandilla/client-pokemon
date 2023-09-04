@@ -1,13 +1,20 @@
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Welcome from "./pages/Welcome/Welcome"
+import Home from './pages/Home/Home'
+import Detail from './pages/Detail/Detail'
+import Create from './pages/Create/Create'
 
-function App() {
+const App = () => {
 
   return (
-    <>
-      <div>
-        
-      </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Welcome />} />
+        <Route path='/home' element={<Home />} />
+        <Route path='/detail' element={<Detail />} />
+        <Route path='/create' element={<Create />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
