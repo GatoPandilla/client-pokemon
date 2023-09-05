@@ -1,28 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+const fetchAllPokemons = async () => {
+  const response = await axios.get('http://localhost:3000/pokemon');
+  return (response.data as { name: string }[]).map((pokemon) => pokemon.name);
+};
+
 const PokemonList = () => {
-  const [pokemons, setPokemons] = useState<string[]>([]);
+  const { data: pokemons, error, isLoading } = useQuery(['pokemons'], fetchAllPokemons);
 
-  const fetchAllPokemons = async () => {
-    try {
-      const response = await axios.get('http://localhost:3000/pokemon');
-      const allPokemons: string[] = response.data.map((pokemon: { name: string }) => pokemon.name);
-      setPokemons(allPokemons);
-    } catch (error) {
-      console.error('Error al obtener todos los Pokémon:', error);
-    }
-  };
+  if (isLoading) {
+    return <div>Cargando...</div>;
+  }
 
-  useEffect(() => {
-    fetchAllPokemons();
-  }, []);
+  if (error) {
+    return <div>Error al obtener los Pokémon</div>;
+  }
 
   return (
     <div>
       <h1>Lista de Pokémon</h1>
       <ul>
-        {pokemons.map((pokemon) => (
+        {pokemons.map((pokemon: string) => (
           <li key={pokemon}>{pokemon}</li>
         ))}
       </ul>
